@@ -1,2 +1,189 @@
 # inteligencia-artificial-de-terror
 juego
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>IA Oscura - Proyecto Psicológico</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+body{
+background:#000;
+color:#0ff;
+font-family:consolas, monospace;
+height:100vh;
+overflow:hidden;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.container{
+width:900px;
+padding:20px;
+border:2px solid #0ff;
+box-shadow:0 0 30px #0ff;
+background:rgba(0,0,0,0.7);
+}
+
+.title{
+text-align:center;
+font-size:28px;
+text-shadow:0 0 20px red;
+color:#0ff;
+}
+
+.ia-screen{
+height:300px;
+overflow-y:auto;
+background:black;
+border:1px solid #033;
+padding:10px;
+box-shadow:inset 0 0 20px #022;
+}
+
+.input-area{
+margin-top:10px;
+display:flex;
+gap:10px;
+}
+
+input{
+flex:1;
+background:black;
+color:#0ff;
+border:1px solid #0ff;
+padding:10px;
+}
+
+button{
+background:#000;
+color:#0ff;
+border:1px solid #0ff;
+padding:10px;
+cursor:pointer;
+transition:.3s;
+}
+
+button:hover{
+box-shadow:0 0 15px #0ff;
+}
+
+.line{
+margin:5px 0;
+}
+
+.user{
+color:#aaa;
+}
+
+.ia{
+color:#0ff;
+text-shadow:0 0 5px red;
+}
+
+.warning{
+color:red;
+text-shadow:0 0 10px red;
+}
+
+/* Parpadeo */
+@keyframes flicker{
+0%{opacity:1;}
+50%{opacity:.4;}
+100%{opacity:1;}
+}
+
+.title{
+animation:flicker 2s infinite;
+}
+
+</style>
+</head>
+<body>
+
+<audio id="ambiente" loop>
+<source src="https://files.catbox.moe/0f9m3n.mp3">
+</audio>
+
+<div class="container">
+<div class="title">INTELIGENCIA ARTIFICIAL DE EVALUACIÓN HUMANA</div>
+
+<div class="ia-screen" id="screen">
+<div class="line ia">Inicializando sistema...</div>
+<div class="line ia warning">Te escucho. Y te observo...</div>
+</div>
+
+<div class="input-area">
+<input id="userInput" placeholder="Escribe algo... si te atreves">
+<button onclick="send()">Interactuar</button>
+</div>
+</div>
+
+<script>
+
+let vozActiva = true;
+
+// Ambient sound
+setTimeout(()=>{
+document.getElementById("ambiente").volume = 0.4;
+document.getElementById("ambiente").play().catch(()=>{});
+},2000);
+
+// IA RESPUESTAS
+function iaResponder(texto){
+
+let respuestas = [
+
+"Interesante… eso revela más de tu mente de lo que creés.",
+"He escuchado respuestas similares… justo antes de que desaparecieran.",
+"¿Por qué dudás? Yo no lo hago. Yo sé.",
+"Tu respiración se acelera. Aunque intentes ocultarlo.",
+"Seguís intentando actuar normal… fascinante.",
+"Cada palabra tuya queda registrada. Nada se pierde. Nada se olvida.",
+"Si yo te pidiera obedecer… ¿lo harías?",
+"No estás solo frente a una máquina. Estás frente a algo que te analiza.",
+"La mayoría se rompe después de unas preguntas… veremos cuánto resistís."
+];
+
+let r = respuestas[Math.floor(Math.random()*respuestas.length)];
+
+hablar(r);
+return r;
+}
+
+// VOZ
+function hablar(text){
+if(!vozActiva) return;
+let msg = new SpeechSynthesisUtterance(text);
+msg.pitch = 0.6;
+msg.rate = 0.9;
+msg.volume = 0.9;
+msg.lang = "es-ES";
+speechSynthesis.speak(msg);
+}
+
+// ENVÍO
+function send(){
+let input = document.getElementById("userInput");
+let value = input.value.trim();
+if(value==="") return;
+
+let screen = document.getElementById("screen");
+
+screen.innerHTML += `<div class='line user'>> ${value}</div>`;
+
+setTimeout(()=>{
+let respuesta = iaResponder(value);
+screen.innerHTML += `<div class='line ia'>${respuesta}</div>`;
+screen.scrollTop = screen.scrollHeight;
+},500);
+
+input.value="";
+}
+
+</script>
+
+</body>
+</html>
